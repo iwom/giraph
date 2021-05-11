@@ -52,7 +52,8 @@ public class TriangleCensusComputation extends BasicComputation<DoubleWritable, 
         value = 0.0;
       }
       vertex.setValue(new DoubleWritable(value));
-      vertex.voteToHalt();
     }
+
+    vertex.voteToHalt();
   }
 }
