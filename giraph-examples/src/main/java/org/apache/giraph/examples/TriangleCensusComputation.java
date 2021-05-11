@@ -7,16 +7,21 @@ import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.FloatWritable;
 
 import java.io.IOException;
+import org.apache.log4j.Logger;
 
 public class TriangleCensusComputation extends BasicComputation<DoubleWritable, DoubleWritable, FloatWritable, DoubleWritable> {
+  private static Logger LOG = Logger.getLogger(TriangleCensusComputation.class);
 
   @Override
   public void compute(Vertex<DoubleWritable, DoubleWritable, FloatWritable> vertex, Iterable<DoubleWritable> messages) throws IOException {
 
+
     if (getSuperstep() == 0) {
+      LOG.info("Starting triangle computation");
+
       for (Edge<DoubleWritable, FloatWritable> edge : vertex.getEdges()) {
         sendMessage(edge.getTargetVertexId(), vertex.getId());
-        System.out.println("Vertex " + vertex.getId() + " sent message " +
+        LOG.info("Vertex " + vertex.getId() + " sent message " +
           vertex.getId() + " to vertex " + edge.getTargetVertexId());
       }
     }
@@ -25,7 +30,7 @@ public class TriangleCensusComputation extends BasicComputation<DoubleWritable, 
       for (DoubleWritable message : messages) {
         for (Edge<DoubleWritable, FloatWritable> edge : vertex.getEdges()) {
           sendMessage(edge.getTargetVertexId(), message);
-          System.out.println("Vertex " + vertex.getId() + " sent message " +
+          LOG.info("Vertex " + vertex.getId() + " sent message " +
             message + " to vertex " + edge.getTargetVertexId());
         }
       }
@@ -44,7 +49,7 @@ public class TriangleCensusComputation extends BasicComputation<DoubleWritable, 
           value += 1.0;
         }
       }
-//      System.out.println("Vertex " + vertex.getId() + " is part of " + value + " triangles and has " + vertex.getNumEdges() + " outgoing edges");
+      LOG.info("Vertex " + vertex.getId() + " is part of " + value + " triangles and has " + vertex.getNumEdges() + " outgoing edges");
       double neighbourPairs = ((double) vertex.getNumEdges() * (vertex.getNumEdges() - 1.0));
       if (neighbourPairs > 0.0) {
         value = (2.0 * value) / neighbourPairs;
