@@ -13,7 +13,10 @@ public class TriangleCensusComputation extends BasicComputation<DoubleWritable, 
   private static Logger LOG = Logger.getLogger(TriangleCensusComputation.class);
 
   @Override
-  public void compute(Vertex<DoubleWritable, DoubleWritable, FloatWritable> vertex, Iterable<DoubleWritable> messages) throws IOException {
+  public void compute(
+    Vertex<DoubleWritable, DoubleWritable, FloatWritable> vertex,
+    Iterable<DoubleWritable> messages
+  ) throws IOException {
 
 
     if (getSuperstep() == 0) {
